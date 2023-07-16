@@ -1,25 +1,43 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+// import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: '首頁',
+    component: () => import('../views/HomeView.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/tourlist',
+    name: '旅遊清單頁面',
+    component: () => import('../views/TourList.vue')
+  },
+  {
+    path: '/tourdetail',
+    name: 'detail',
+    component: () => import('../views/TourDetail.vue')
+  },
+  {
+    path: '/map',
+    name: 'map',
+    component: () => import('../views/MapView.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
+  scrollBehavior (to) {
+    if (to.fullPath.match('tourlist')) {
+      return {
+        top: 0
+      }
+    } else if (to.fullPath.match('tourdetail')) {
+      return {
+        top: 0
+      }
+    }
+  }
 })
 
 export default router
