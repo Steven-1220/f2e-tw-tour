@@ -193,7 +193,7 @@ export default {
     keyWordSearch () {
       console.log('unifyStandardData', this.unifyStandardData)
       const keyWord = this.unifyStandardData.filter(item => {
-        return item.titleName.match(this.search)
+        return item.titleName.includes(this.search)
       })
       if (keyWord[0].titleName === this.search) {
         this.$router.push({
@@ -253,15 +253,30 @@ export default {
       })
     },
 
-    getAllInfo () {
-      Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
-      setTimeout(() => {
+    // getAllInfo () {
+    //   Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
+    //   setTimeout(() => {
+    //     this.transformAllCategoryData()
+    //   }, 1500)
+    // },
+
+    // getAllInfo () {
+    //   Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
+    //     .then(() => {
+    //       this.transformAllCategoryData()
+    //     })
+    // },
+    async getAllInfo () {
+      try {
+        await Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
         this.transformAllCategoryData()
-      }, 1500)
+      } catch (err) {
+        console.log(err)
+      }
     },
-    getScenicSpotInfo () {
+    async getScenicSpotInfo () {
       const url = 'https://tdx.transportdata.tw/api/basic/v2/Tourism/ScenicSpot?%24top=500&%24format=JSON'
-      this.$http.get(url, {
+      return this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
         }
@@ -276,9 +291,9 @@ export default {
           console.log(err.response)
         })
     },
-    getRestaurantInfo () {
+    async getRestaurantInfo () {
       const url = 'https://tdx.transportdata.tw/api/basic/v2/Tourism/Restaurant?%24top=500&%24format=JSON'
-      this.$http.get(url, {
+      return this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
         }
@@ -293,9 +308,9 @@ export default {
           console.log(err.response)
         })
     },
-    getHotelInfo () {
+    async getHotelInfo () {
       const url = 'https://tdx.transportdata.tw/api/basic/v2/Tourism/Hotel?%24top=500&%24format=JSON'
-      this.$http.get(url, {
+      return this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
         }
@@ -310,9 +325,9 @@ export default {
           console.log(err.response)
         })
     },
-    getActivityInfo () {
+    async getActivityInfo () {
       const url = 'https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?%24top=500&%24format=JSON'
-      this.$http.get(url, {
+      return this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
         }
@@ -330,9 +345,10 @@ export default {
   },
   computed: {
     processSearchWord () {
-      const word = new RegExp(this.search, 'g')
+      // const word = new RegExp(this.search, 'g')
+      const word = this.search
       return this.unifyStandardData.filter(item => {
-        return item.titleName.match(word)
+        return item.titleName.includes(word)
       })
     }
   },

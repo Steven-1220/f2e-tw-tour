@@ -1,38 +1,5 @@
 <template>
   <div class="container card-map-area">
-    <!-- 景點卡片待刪除 -->
-    <template v-if="this.$route.query.category === 'ScenicSpo'">
-      <div class="row card-scroll-set flex-nowrap vw-100">
-        <div class="col pb-2" v-for="item in mapFilterData" :key="item.ScenicSpotID">
-          <div class="card card-info card-map-item position-relative border-0 h-100">
-            <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-list-page.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
-            <div class="card-body card-info text-white shadow-layer">
-              <div class="pin bg-white">
-                <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ScenicSpotID, 'ScenicSpot')">
-                  <span v-if="pin.find(pinItem => pinItem.id === item.ScenicSpotID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
-                  <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
-                </a>
-              </div>
-              <div class="d-flex  flex-column h-100 justify-content-end">
-                <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">景點</span></div>
-                <h5 class="card-title fw-bold">{{ item.ScenicSpotName }}</h5>
-                <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
-                <router-link :to="{
-                  path:'/tourdetail',
-                  query: {
-                    id: item.ScenicSpotID,
-                    city: this.$route.query.city,
-                    category: this.$route.query.category
-                  }
-                }"  class="stretched-link">
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-
     <!-- 景點卡片 -->
     <template v-if="this.$route.query.category === 'ScenicSpot'">
       <swiper
@@ -277,6 +244,7 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 // import Swiper core and required modules
@@ -303,6 +271,17 @@ export default {
       pin: JSON.parse(localStorage.getItem('pin-items')) || []
     }
   },
+  methods: {
+    switchPinItem (id, category) {
+      const obj = {
+        id: id,
+        category: category
+      }
+      const pinItemIndex = this.pin.findIndex((item) => item.id === obj.id)
+      pinItemIndex === -1 ? this.pin.push(obj) : this.pin.splice(pinItemIndex, 1)
+      emitter.emit('get-pin-items', this.pin)
+    }
+  },
   watch: {
     cardData () {
       this.mapFilterData = this.cardData
@@ -312,6 +291,12 @@ export default {
   mounted () {
     this.filterData = this.cardData
     console.log('mapFilterData', this.mapFilterData)
+    emitter.on('get-pin-items', (pin) => {
+      this.pin = pin
+    })
+    emitter.on('delete-pin-items', (pin) => {
+      this.pin = pin
+    })
   }
 }
 </script>

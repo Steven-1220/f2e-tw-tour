@@ -36,18 +36,8 @@
 
         <div class="row">
           <div class="col d-flex justify-content-center align-items-center">
-            <div class="home-area">
-              <router-link to="/" class="d-inline-block position-relative">
-                <img src="../assets/images/ellipse.svg" class="orange-circle" alt="橘色圓">
-                <img src="../assets/images/logo.svg" class="logo-go-home" alt="logo圖">
-              </router-link>
-            </div>
-            <div class="mt-5 me-5 favorite">
-              <a href="" class="d-block position-relative bg-secondary rounded-circle p-1">
-                <img src="../assets/images/pin.png" class="favorite-pin" alt="">
-                <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle-x">2</span>
-              </a>
-            </div>
+            <GoHomeCircle></GoHomeCircle>
+            <FixPinButton></FixPinButton>
           </div>
         </div>
       </div>
@@ -55,7 +45,10 @@
     <div class="main mt-9 mb-10">
       <div class="container position-relative">
         <div class="tourism-pin-area bg-white border d-flex justify-content-center align-items-center">
-          <img src="../assets//images/pin.png" class="pin-img" alt="釘選">
+          <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(this.$route.query.id, this.$route.query.category)">
+            <span v-if="pin.find(pinItem => pinItem.id === this.$route.query.id)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+            <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+          </a>
         </div>
         <h2 v-if="tourismInfo['ScenicSpotName'] !== undefined" class="fw-bold mb-6">{{tourismInfo.ScenicSpotName}}</h2>
         <h2 v-if="tourismInfo['RestaurantName'] !== undefined" class="fw-bold mb-6">{{tourismInfo.RestaurantName}}</h2>
@@ -160,46 +153,70 @@
             <div class="card card-info position-relative border-0 h-100" >
               <img :src="item.Picture?.PictureUrl1 || require('@/assets/images/card-img.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
               <div class="card-body card-info text-white shadow-layer">
-                <div class="pin bg-white">
-                  <div class="d-flex justify-content-center align-items-center h-100">
-                    <img src="../assets/images/pin.png" alt="釘選">
+                <template v-if="currentPageCategory === 'ScenicSpot'">
+                  <div class="pin bg-white">
+                    <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ScenicSpotID, 'ScenicSpot')">
+                      <span v-if="pin.find(pinItem => pinItem.id === item.ScenicSpotID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                      <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                    </a>
                   </div>
-                </div>
-                <div class="d-flex flex-column h-100 justify-content-end">
-                  <template v-if="currentPageCategory === 'ScenicSpot'">
+                  <div class="d-flex flex-column h-100 justify-content-end">
                     <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">景點</span></div>
                     <h5 class="card-title fw-bold">{{ item.ScenicSpotName }}</h5>
                     <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
                     <router-link class="stretched-link" to="/tourdetail"
                       @click="enterTourismDetail(item.ScenicSpotID, currentPageCity,currentPageCategory)">
                     </router-link>
-                  </template>
-                  <template v-if="currentPageCategory === 'Restaurant'">
-                    <div class="tag mb-2"><span class="bg-danger py-1 px-2 rounded">美食</span></div>
-                    <h5 class="card-title fw-bold">{{ item.RestaurantName  }}</h5>
+                  </div>
+                </template>
+                <template v-if="currentPageCategory === 'Restaurant'">
+                  <div class="pin bg-white">
+                    <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.RestaurantID, 'Restaurant')">
+                      <span v-if="pin.find(pinItem => pinItem.id === item.RestaurantID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                      <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                    </a>
+                  </div>
+                  <div class="d-flex flex-column h-100 justify-content-end">
+                    <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">美食</span></div>
+                    <h5 class="card-title fw-bold">{{ item.RestaurantName }}</h5>
                     <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
                     <router-link class="stretched-link" to="/tourdetail"
                       @click="enterTourismDetail(item.RestaurantID, currentPageCity,currentPageCategory)">
                     </router-link>
-                  </template>
-                  <template v-if="currentPageCategory === 'Hotel'">
-                    <div class="tag mb-2"><span class="bg-secondary py-1 px-2 rounded">旅宿</span></div>
+                  </div>
+                </template>
+                <template v-if="currentPageCategory === 'Hotel'">
+                  <div class="pin bg-white">
+                    <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.HotelID, 'Hotel')">
+                      <span v-if="pin.find(pinItem => pinItem.id === item.HotelID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                      <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                    </a>
+                  </div>
+                  <div class="d-flex flex-column h-100 justify-content-end">
+                    <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">旅宿</span></div>
                     <h5 class="card-title fw-bold">{{ item.HotelName }}</h5>
                     <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
                     <router-link class="stretched-link" to="/tourdetail"
                       @click="enterTourismDetail(item.HotelID, currentPageCity,currentPageCategory)">
                     </router-link>
-                  </template>
-                  <template v-if="currentPageCategory === 'Activity'">
-                    <div class="tag mb-2"><span class="bg-success py-1 px-2 rounded">活動</span></div>
+                  </div>
+                </template>
+                <template v-if="currentPageCategory === 'Activity'">
+                  <div class="pin bg-white">
+                    <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ActivityID, 'Activity')">
+                      <span v-if="pin.find(pinItem => pinItem.id === item.ActivityID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                      <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                    </a>
+                  </div>
+                  <div class="d-flex flex-column h-100 justify-content-end">
+                    <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">活動</span></div>
                     <h5 class="card-title fw-bold">{{ item.ActivityName }}</h5>
                     <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
                     <router-link class="stretched-link" to="/tourdetail"
                       @click="enterTourismDetail(item.ActivityID, currentPageCity,currentPageCategory)">
                     </router-link>
-                  </template>
-
-                </div>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -214,13 +231,18 @@
 <script>
 import FooterView from '@/components/FooterView.vue'
 import CardNearby from '@/components/CardNearby.vue'
+import GoHomeCircle from '@/components/GoHomeCircle.vue'
+import FixPinButton from '@/components/FixPinButton.vue'
+import emitter from '@/libs/emitter'
 
 // eslint-disable-next-line no-unused-vars
 let timer
 export default {
   components: {
     FooterView,
-    CardNearby
+    CardNearby,
+    GoHomeCircle,
+    FixPinButton
   },
   inject: ['reload'],
   data () {
@@ -242,6 +264,7 @@ export default {
       showBanner: 0,
       transitionName: 'slide-left-in',
       token: JSON.parse(localStorage.getItem('TdxToken')) || [],
+      pin: JSON.parse(localStorage.getItem('pin-items')) || [],
       defaultImg: 'this.src="' + require('@/assets/images/banner-city.jpg') + '"'
     }
   },
@@ -292,9 +315,6 @@ export default {
           this.bannerImages = arrPics.filter((item, index) => {
             return index % 2 === 0 ? item : null
           })
-          console.log('bannerImages', this.bannerImages)
-          // console.log(this.tourismInfo)
-          // console.log(this.currentTourismPosition)
           const { PositionLon, PositionLat } = res.data[0].Position
           this.getNearbyInfo(PositionLon, PositionLat)
         })
@@ -359,14 +379,18 @@ export default {
           category: category
         }
       })
-      // setTimeout(() => {
-      //   location.reload()
-      // }, 500)
-
-      // setTimeout(() => {
-      //   this.getTourismContent()
-      //   this.getFilterInfo()
-      // }, 500)
+    },
+    openPinItems () {
+      this.$refs.pinItemsModalRef.openModal()
+    },
+    switchPinItem (id, category) {
+      const obj = {
+        id: id,
+        category: category
+      }
+      const pinItemIndex = this.pin.findIndex((item) => item.id === obj.id)
+      pinItemIndex === -1 ? this.pin.push(obj) : this.pin.splice(pinItemIndex, 1)
+      emitter.emit('get-pin-items', this.pin)
     }
   },
   watch: {
@@ -390,11 +414,23 @@ export default {
       },
       deep: true
     }
+    // pin: {
+    //   handler () {
+    //     localStorage.setItem('pin-items', JSON.stringify(this.pin))
+    //   },
+    //   deep: true
+    // }
   },
   mounted () {
     this.getTourismContent()
     timer = setInterval(this.slideShow, 2500)
     this.getFilterInfo()
+    emitter.on('get-pin-items', (pin) => {
+      this.pin = pin
+    })
+    emitter.on('delete-pin-items', (pin) => {
+      this.pin = pin
+    })
   }
 }
 </script>
@@ -402,48 +438,6 @@ export default {
 <style lang="scss">
 .main {
   min-height: calc(100vh - (32vh + 400px));
-}
-
-.home-area {
-  position: absolute;
-  top: -11%;
-  left: -20%;
-  .orange-circle {
-    width: 250px;
-  }
-}
-
-@media (min-width: 576px) {
-  .home-area {
-    top: -11%;
-    left: -17%;
-  }
-}
-
-@media (min-width: 768px) {
-  .home-area {
-    top: -6%;
-    left: -5%;
-  }
-}
-
-.logo-go-home {
-  max-width: 120px;
-  max-height: 90px;
-  position: absolute;
-  left: 45%;
-  bottom: 17%;
-  z-index: 2;
-}
-
-.favorite {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.favorite-pin {
-  width: 36px;
 }
 
 .tourism-pin-area {

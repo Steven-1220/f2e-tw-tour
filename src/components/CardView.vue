@@ -16,7 +16,7 @@
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">景點</span></div>
                 <h5 class="card-title fw-bold">{{ item.ScenicSpotName }}</h5>
-                <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
+                <p class="location"><img src="../assets/images/location.svg" alt="位置"> {{ item.City }}</p>
                 <router-link :to="{
                   path:'/tourdetail',
                   query: {
@@ -46,7 +46,7 @@
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-danger py-1 px-2 rounded">美食</span></div>
                 <h5 class="card-title fw-bold">{{ item.RestaurantName }}</h5>
-                <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
+                <p class="location"><img src="../assets/images/location.svg" alt="位置"> {{ item.City }}</p>
                 <router-link :to="{
                   path:'/tourdetail',
                   query: {
@@ -76,7 +76,7 @@
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-secondary py-1 px-2 rounded">旅宿</span></div>
                 <h5 class="card-title fw-bold">{{ item.HotelName }}</h5>
-                <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
+                <p class="location"><img src="../assets/images/location.svg" alt="位置"> {{ item.City }}</p>
                 <router-link :to="{
                   path:'/tourdetail',
                   query: {
@@ -106,7 +106,7 @@
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-success py-1 px-2 rounded">活動</span></div>
                 <h5 class="card-title fw-bold">{{ item.ActivityName }}</h5>
-                <p class="location"><img src="../assets/images/location.svg" alt="位置">{{ item.City }}</p>
+                <p class="location"><img src="../assets/images/location.svg" alt="位置"> {{ item.City }}</p>
                 <router-link :to="{
                   path:'/tourdetail',
                   query: {
@@ -189,12 +189,6 @@ export default {
     },
     $route () {
       this.getCategoryInfo()
-    },
-    pin: {
-      handler () {
-        localStorage.setItem('pin-items', JSON.stringify(this.pin))
-      },
-      deep: true
     }
   },
   methods: {
@@ -227,7 +221,7 @@ export default {
       }
       const pinItemIndex = this.pin.findIndex((item) => item.id === obj.id)
       pinItemIndex === -1 ? this.pin.push(obj) : this.pin.splice(pinItemIndex, 1)
-      emitter.emit('get-pin-items')
+      emitter.emit('get-pin-items', this.pin)
     }
   },
   mounted () {

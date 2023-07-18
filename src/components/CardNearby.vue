@@ -19,9 +19,10 @@
             <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-img.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
             <div class="card-body card-info text-white shadow-layer">
               <div class="pin bg-white">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                  <img src="../assets/images/pin.png" alt="釘選">
-                </div>
+                <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ScenicSpotID, 'ScenicSpot')">
+                  <span v-if="pin.find(pinItem => pinItem.id === item.ScenicSpotID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                  <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                </a>
               </div>
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-primary py-1 px-2 rounded">景點</span></div>
@@ -64,9 +65,10 @@
             <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-img.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
             <div class="card-body card-info text-white shadow-layer">
               <div class="pin bg-white">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                  <img src="../assets/images/pin.png" alt="釘選">
-                </div>
+                <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.RestaurantID, 'Restaurant')">
+                  <span v-if="pin.find(pinItem => pinItem.id === item.RestaurantID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                  <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                </a>
               </div>
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-danger py-1 px-2 rounded">美食</span></div>
@@ -109,9 +111,10 @@
             <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-img.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
             <div class="card-body card-info text-white shadow-layer">
               <div class="pin bg-white">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                  <img src="../assets/images/pin.png" alt="釘選">
-                </div>
+                <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.HotelID, 'Hotel')">
+                  <span v-if="pin.find(pinItem => pinItem.id === item.HotelID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
+                  <span v-else><img src="../assets/images/pin.png" alt="未釘選"></span>
+                </a>
               </div>
               <div class="d-flex flex-column h-100 justify-content-end">
                 <div class="tag mb-2"><span class="bg-secondary py-1 px-2 rounded">旅宿</span></div>
@@ -138,6 +141,7 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
 
 export default {
   props: {
@@ -159,62 +163,11 @@ export default {
       renderPageHotelData: [],
       currentPageId: this.$route.query.id,
       currentPageCity: this.$route.query.city,
-      token: JSON.parse(localStorage.getItem('TdxToken')) || []
+      token: JSON.parse(localStorage.getItem('TdxToken')) || [],
+      pin: JSON.parse(localStorage.getItem('pin-items')) || []
     }
   },
   methods: {
-
-    // 之後要刪除的程式碼
-    // getTourismNearByScenicInfos () {
-    //   const scenicSpotData = JSON.parse(JSON.stringify(this.relatedNearbyInfos.ScenicSpot))
-    //   const isSameID = scenicSpotData.some(item => {
-    //     return item.ScenicSpotID === this.currentPageId
-    //   })
-    //   if (isSameID) {
-    //     const currentPageIndex = scenicSpotData.findIndex(item => {
-    //       return item.ScenicSpotID === this.currentPageId
-    //     })
-    //     scenicSpotData.splice(currentPageIndex, 1)
-    //   }
-    //   if (scenicSpotData.length >= 4) {
-    //     for (let i = 1; i <= 4; i++) {
-    //       const randomIndex = Math.floor(Math.random() * scenicSpotData.length)
-    //       const arr = scenicSpotData.splice(randomIndex, 1)
-    //       this.randomScenicSpotData.push(arr[0])
-    //     }
-    //   } else if (scenicSpotData.length < 4 && scenicSpotData.length >= 1) {
-    //     this.randomScenicSpotData = scenicSpotData
-    //   }
-    //   this.randomScenicSpotId = this.randomScenicSpotData.map(item => {
-    //     return item.ScenicSpotID
-    //   })
-    //   this.constructNewRenderData(this.randomScenicSpotId, 'ScenicSpot')
-    // },
-    // getTourismNearByRestaurantInfos () {
-    //   const restaurantData = JSON.parse(JSON.stringify(this.relatedNearbyInfos.Restaurant))
-    //   const isSameID = restaurantData.some(item => {
-    //     return item.RestaurantID === this.currentPageId
-    //   })
-    //   if (isSameID) {
-    //     const currentPageIndex = restaurantData.findIndex(item => {
-    //       return item.RestaurantID === this.currentPageId
-    //     })
-    //     restaurantData.splice(currentPageIndex, 1)
-    //   }
-    //   if (restaurantData.length >= 4) {
-    //     for (let i = 1; i <= 4; i++) {
-    //       const randomIndex = Math.floor(Math.random() * restaurantData.length)
-    //       const arr = restaurantData.splice(randomIndex, 1)
-    //       this.randomRestaurantData.push(arr[0])
-    //     }
-    //   } else if (restaurantData.length < 4 && restaurantData.length >= 1) {
-    //     this.randomRestaurantData = restaurantData
-    //   }
-    //   this.randomRestaurantId = this.randomRestaurantData.map(item => {
-    //     return item.RestaurantID
-    //   })
-    //   this.constructNewRenderData(this.randomRestaurantId, 'Restaurant')
-    // },
     getNearByScenicSpotId (category) {
       const randomScenicSpotData = this.processData(category)
       this.randomScenicSpotId = randomScenicSpotData.map(item => {
@@ -285,6 +238,15 @@ export default {
     },
     enterTourismDetail (id, city, category) {
       this.$emit('emit-nearby-info', id, city, category)
+    },
+    switchPinItem (id, category) {
+      const obj = {
+        id: id,
+        category: category
+      }
+      const pinItemIndex = this.pin.findIndex((item) => item.id === obj.id)
+      pinItemIndex === -1 ? this.pin.push(obj) : this.pin.splice(pinItemIndex, 1)
+      emitter.emit('get-pin-items', this.pin)
     }
   },
   watch: {
@@ -300,6 +262,14 @@ export default {
       },
       deep: true
     }
+  },
+  mounted () {
+    emitter.on('get-pin-items', (pin) => {
+      this.pin = pin
+    })
+    emitter.on('delete-pin-items', (pin) => {
+      this.pin = pin
+    })
   }
 }
 </script>
