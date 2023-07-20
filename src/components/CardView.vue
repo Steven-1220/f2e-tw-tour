@@ -182,6 +182,12 @@ export default {
         if (item.Picture.PictureUrl1 === undefined) {
           item.Picture.PictureUrl1 = this.undefinedCard
         }
+        const pattern = /\/d\/([^/]+)\//
+        const url = 'https://drive.google.com/uc?export=view&id='
+        if (item.Picture.PictureUrl1.startsWith('https://drive.google.com/file/d/')) {
+          const id = item.Picture.PictureUrl1.match(pattern)[1]
+          item.Picture.PictureUrl1 = `${url}${id}`
+        }
         return item
       })
       this.filterData = filterApiData
