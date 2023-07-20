@@ -33,7 +33,9 @@
               <img src="../assets/images/search.svg" alt="搜尋按鈕">
             </button>
           </div>
-          <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white" @click="lookMap">
+          <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white"
+            data-bs-toggle="tooltip" data-bs-placement="right" title="查看地圖"
+            @click="lookMap">
             <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
           </button>
         </div>
@@ -41,6 +43,7 @@
     </header>
 
     <div class="main">
+      <LoadingView></LoadingView>
       <div class="container py-10">
         <CardView :card-data="tourData"></CardView>
       </div>
@@ -55,6 +58,7 @@ import FooterView from '@/components/FooterView.vue'
 import CardView from '@/components/CardView.vue'
 import FixPinButton from '@/components/FixPinButton.vue'
 import GoHomeCircle from '@/components/GoHomeCircle.vue'
+import LoadingView from '@/components/LoadingView.vue'
 import emitter from '@/libs/emitter'
 
 export default {
@@ -62,14 +66,15 @@ export default {
     FooterView,
     CardView,
     FixPinButton,
-    GoHomeCircle
-    // PaginationView
+    GoHomeCircle,
+    LoadingView
   },
   data () {
     return {
       selectCity: '',
       selectCategory: '',
       selectCityChinese: '台灣',
+      isLoading: false,
       tourData: [],
       cities: [
         {
@@ -186,6 +191,7 @@ export default {
   methods: {
     getCustomTourismInfo () {
       if (this.selectCity === '' || this.selectCategory === '') return
+      emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=50&%24format=JSON`
       this.$http.get(url, {
         headers: {
@@ -201,6 +207,8 @@ export default {
               category: this.selectCategory
             }
           })
+          emitter.emit('stop-loading')
+          emitter.emit('first-page')
         })
         .catch(err => {
           console.log(err)
@@ -210,6 +218,7 @@ export default {
       const { city, category } = this.$route.query
       this.selectCity = city
       this.selectCategory = category
+      emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24top=50&%24format=JSON`
       this.$http.get(url, {
         headers: {
@@ -218,6 +227,7 @@ export default {
       })
         .then(res => {
           this.tourData = res.data
+          emitter.emit('stop-loading')
         })
         .catch(err => {
           console.log(err)
