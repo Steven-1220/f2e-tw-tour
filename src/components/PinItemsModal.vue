@@ -21,7 +21,7 @@
               <tbody>
                 <!-- 景點 -->
                 <template v-if="renderPinScenicSpotData.length !== 0">
-                  <tr v-for="item in renderPinScenicSpotData" :key="item.ScenicSpotID">
+                  <tr v-for="(item, index) in renderPinScenicSpotData" :key="item.ScenicSpotID">
                     <td style="max-width: 180px; height: 120px;" class="position-relative">
                       <router-link to="/tourdetail" class="stretched-link"
                         @click="enterPinItemDetail(item.ScenicSpotID, item.City, 'ScenicSpot')">
@@ -33,13 +33,13 @@
                     <td >景點</td>
                     <td>{{ item.City }}</td>
                     <td>
-                      <button class="btn btn-warning" @click="deletePinItem(item.ScenicSpotID, 'ScenicSpot')">取消釘選</button>
+                      <button class="btn btn-warning" @click="deletePinItem(item.ScenicSpotID, 'ScenicSpot',index)">取消釘選</button>
                     </td>
                   </tr>
                 </template>
                 <!-- 餐廳 -->
                 <template v-if="renderPinRestaurantData.length !== 0">
-                  <tr v-for="item in renderPinRestaurantData" :key="item.RestaurantID">
+                  <tr v-for="(item, index) in renderPinRestaurantData" :key="item.RestaurantID">
                     <td style="max-width: 180px;  height: 120px" class="position-relative">
                       <router-link to="/tourdetail" class="stretched-link"
                         @click="enterPinItemDetail(item.RestaurantID, item.City, 'Restaurant')">
@@ -51,13 +51,13 @@
                     <td >美食</td>
                     <td>{{ item.City }}</td>
                     <td>
-                      <button class="btn btn-warning" @click="deletePinItem(item.RestaurantID, 'Restaurant')">取消釘選</button>
+                      <button class="btn btn-warning" @click="deletePinItem(item.RestaurantID, 'Restaurant', index)">取消釘選</button>
                     </td>
                   </tr>
                 </template>
                 <!-- 旅宿 -->
                 <template v-if="renderPinHotelData.length !== 0">
-                  <tr v-for="item in renderPinHotelData" :key="item.HotelID">
+                  <tr v-for="(item, index) in renderPinHotelData" :key="item.HotelID">
                     <td style="max-width: 180px;  height: 120px" class="position-relative">
                       <router-link to="/tourdetail" class="stretched-link"
                         @click="enterPinItemDetail(item.HotelID, item.City, 'Hotel')">
@@ -69,13 +69,13 @@
                     <td >旅宿</td>
                     <td>{{ item.City }}</td>
                     <td>
-                      <button class="btn btn-warning" @click="deletePinItem(item.HotelID, 'Hotel')">取消釘選</button>
+                      <button class="btn btn-warning" @click="deletePinItem(item.HotelID, 'Hotel', index)">取消釘選</button>
                     </td>
                   </tr>
                 </template>
                 <!-- 活動 -->
                 <template v-if="renderPinActivityData.length !== 0">
-                  <tr v-for="item in renderPinActivityData" :key="item.ActivityID">
+                  <tr v-for="(item, index) in renderPinActivityData" :key="item.ActivityID">
                     <td style="max-width: 180px;  height: 120px" class="position-relative">
                       <router-link to="/tourdetail" class="stretched-link"
                         @click="enterPinItemDetail(item.ActivityID, item.City, 'Activity')">
@@ -87,7 +87,7 @@
                     <td >活動</td>
                     <td>{{ item.City }}</td>
                     <td>
-                      <button class="btn btn-warning" @click="deletePinItem(item.ActivityID, 'Activity')">取消釘選</button>
+                      <button class="btn btn-warning" @click="deletePinItem(item.ActivityID, 'Activity', index)">取消釘選</button>
                     </td>
                   </tr>
                 </template>
@@ -266,10 +266,10 @@ export default {
       })
       this.closeModal()
     },
-    deletePinItem (id, category) {
+    deletePinItem (id, category, index) {
       const deleteIndex = this.pin.findIndex(item => item.id === id)
+      this[`renderPin${category}Data`].splice(index, 1)
       this.pin.splice(deleteIndex, 1)
-      this.transformPinItems()
       emitter.emit('delete-pin-items', this.pin)
     },
     deleteAllPinItems () {
