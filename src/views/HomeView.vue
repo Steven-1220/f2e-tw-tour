@@ -24,7 +24,7 @@
                 </template>
               </select>
               <input type="text" class="form-control rounded-pill mb-4 py-2 fs-5"
-              v-model="search" placeholder="可輸入關鍵字..">
+              v-model="search" placeholder="以關鍵字找尋..">
               <ul class="search-list bg-white list-unstyled d-flex flex-column" v-if="isSearchList">
                 <li v-for="item in processSearchWord" :key="item.id">
                   <router-link class="d-block text-decoration-none p-1" :to="{
@@ -42,6 +42,9 @@
               <button class="btn btn-primary rounded-pill w-100 text-white fs-5" @click="searchTourInfo">
                 <span class="d-flex justify-content-center align-items-center"><img src="../assets/images/search.svg" class="me-3" alt="搜尋按鈕">搜尋</span>
               </button>
+              <div class="alert alert-danger mt-3" role="alert" v-if="isNotConfirmSearch">
+                請選擇<span class="fw-bold">地點</span>和<span class="fw-bold">類別</span>，或是以<span class="fw-bold">關鍵字</span>找尋
+              </div>
           </div>
         </div>
       </div>
@@ -65,6 +68,7 @@ export default {
       activityData: [],
       unifyStandardData: [],
       isSearchList: false,
+      isNotConfirmSearch: true,
       cities: [
         {
           traditionalName: '臺北市',
@@ -188,6 +192,8 @@ export default {
         })
       } else if (this.search.trim() !== '') {
         this.keyWordSearch()
+      } else {
+        this.isNotConfirmSearch = true
       }
     },
     keyWordSearch () {
@@ -195,7 +201,9 @@ export default {
       const keyWord = this.unifyStandardData.filter(item => {
         return item.titleName.includes(this.search)
       })
-      if (keyWord[0].titleName === this.search) {
+      if (keyWord.length === 0) {
+        return null
+      } else if (keyWord[0].titleName === this.search) {
         this.$router.push({
           name: 'detail',
           query: {
@@ -205,6 +213,18 @@ export default {
           }
         })
       }
+      // if (keyWord[0].titleName === this.search) {
+      //   this.$router.push({
+      //     name: 'detail',
+      //     query: {
+      //       id: keyWord[0].id,
+      //       city: keyWord[0].engName,
+      //       category: keyWord[0].category
+      //     }
+      //   })
+      // } else if (keyWord.length === 0) {
+      //   return null
+      // }
     },
     transformAllCategoryData () {
       const newAry = []
@@ -253,19 +273,6 @@ export default {
       })
     },
 
-    // getAllInfo () {
-    //   Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
-    //   setTimeout(() => {
-    //     this.transformAllCategoryData()
-    //   }, 1500)
-    // },
-
-    // getAllInfo () {
-    //   Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
-    //     .then(() => {
-    //       this.transformAllCategoryData()
-    //     })
-    // },
     async getAllInfo () {
       try {
         await Promise.all([this.getScenicSpotInfo(), this.getRestaurantInfo(), this.getHotelInfo(), this.getActivityInfo()])
@@ -345,7 +352,6 @@ export default {
   },
   computed: {
     processSearchWord () {
-      // const word = new RegExp(this.search, 'g')
       const word = this.search
       return this.unifyStandardData.filter(item => {
         return item.titleName.includes(word)
@@ -354,7 +360,27 @@ export default {
   },
   watch: {
     search () {
-      this.search.trim() !== '' ? this.isSearchList = true : this.isSearchList = false
+      if (this.search.trim() !== '') {
+        this.isSearchList = true
+        this.isNotConfirmSearch = false
+      } else if (this.search.trim() === '') {
+        this.isSearchList = false
+        this.isNotConfirmSearch = true
+      }
+    },
+    selectCity () {
+      if (this.selectCity !== '' && this.search.trim() === '') {
+        this.isNotConfirmSearch = false
+      } else {
+        this.isNotConfirmSearch = true
+      }
+    },
+    selectCategory () {
+      if (this.selectCategory !== '' && this.search.trim() === '') {
+        this.isNotConfirmSearch = false
+      } else {
+        this.isNotConfirmSearch = true
+      }
     }
   },
   mounted () {
