@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
 
 export default {
   props: {
@@ -30,7 +31,6 @@ export default {
   },
   data () {
     return {
-      // currentPageData: [],
       pageInfo: {
         totalPages: 1,
         currentPage: 1,
@@ -50,6 +50,11 @@ export default {
         behavior: 'smooth'
       })
     }
+  },
+  mounted () {
+    emitter.on('first-page', () => {
+      this.changePage(1)
+    })
   }
 }
 </script>
