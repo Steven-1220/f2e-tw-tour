@@ -1,6 +1,7 @@
 <template>
     <header>
       <div class="container-fluid px-0">
+        <LoadingView></LoadingView>
         <div class="carousel-area">
           <template  v-if="bannerImages.length !== 0">
             <transition-group :name="transitionName">
@@ -9,10 +10,12 @@
               </div>
             </transition-group>
             <div class="carousel-btns d-flex justify-content-center align-items-end">
-              <button type="button" class="border-0 bg-transparent" v-for="(num, index) in bannerImages.length" :key="num +'123'" @click="showBannerImg(num - 1)">
-                <span v-if="showBanner === index"><i class="bi bi-circle-fill"></i></span>
-                <span v-else><i class="bi bi-circle"></i></span>
-              </button>
+              <template v-if="bannerImages.length >= 2">
+                <button type="button" class="border-0 bg-transparent" v-for="(num, index) in bannerImages.length" :key="num +'123'" @click="showBannerImg(num - 1)">
+                  <span v-if="showBanner === index"><i class="bi bi-circle-fill"></i></span>
+                  <span v-else><i class="bi bi-circle"></i></span>
+                </button>
+              </template>
             </div>
           </template>
           <!-- <transition-group :name="transitionName">
@@ -233,6 +236,7 @@ import FooterView from '@/components/FooterView.vue'
 import CardNearby from '@/components/CardNearby.vue'
 import GoHomeCircle from '@/components/GoHomeCircle.vue'
 import FixPinButton from '@/components/FixPinButton.vue'
+import LoadingView from '@/components/LoadingView.vue'
 import emitter from '@/libs/emitter'
 
 // eslint-disable-next-line no-unused-vars
@@ -242,7 +246,8 @@ export default {
     FooterView,
     CardNearby,
     GoHomeCircle,
-    FixPinButton
+    FixPinButton,
+    LoadingView
   },
   inject: ['reload'],
   data () {
@@ -299,6 +304,7 @@ export default {
     getTourismContent () {
       const { id, city, category } = this.$route.query
       console.log(id, city, category)
+      emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24filter=contains%28${category}ID%2C%27${id}%27%29&%24format=JSON`
       // const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/Hotel/Taichung?%24filter=contains%28HotelID%2C%27C4_315080000H_003044%27%29&%24format=JSON`
       this.$http.get(url, {
@@ -315,6 +321,7 @@ export default {
           this.bannerImages = arrPics.filter((item, index) => {
             return index % 2 === 0 ? item : null
           })
+          emitter.emit('stop-loading')
           const { PositionLon, PositionLat } = res.data[0].Position
           this.getNearbyInfo(PositionLon, PositionLat)
         })

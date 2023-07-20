@@ -8,6 +8,7 @@
       </div>
     </div>
     <div class="container select-map-location">
+      <LoadingView></LoadingView>
       <div class="row justify-content-center align-items-center">
         <div class="col-2">
           <select class="form-select rounded-pill text-center shadow mb-0 me-3 fw-bold" v-model="selectCity" @change="selectMapCity">
@@ -49,13 +50,16 @@ import L from 'leaflet'
 import CardMap from '@/components/CardMap.vue'
 import GoHomeCircle from '@/components/GoHomeCircle.vue'
 import FixPinButton from '@/components/FixPinButton.vue'
+import LoadingView from '@/components/LoadingView.vue'
+import emitter from '@/libs/emitter'
 
 let osmMap = {}
 export default {
   components: {
     CardMap,
     GoHomeCircle,
-    FixPinButton
+    FixPinButton,
+    LoadingView
   },
   data () {
     return {
@@ -209,6 +213,7 @@ export default {
       }).addTo(osmMap)
     },
     getCustomTourismInfo () {
+      emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=50&%24format=JSON`
       this.$http.get(url, {
         headers: {
@@ -220,12 +225,14 @@ export default {
           this.mapCardData = res.data
           const data = res.data
           this.determineMarkerCategory(data)
+          emitter.emit('stop-loading')
         })
         .catch(err => {
           console.log(err)
         })
     },
     getCityAllCategories () {
+      emitter.emit('start-loading')
       const categories = ['ScenicSpot', 'Restaurant', 'Hotel', 'Activity']
       categories.forEach(category => {
         const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${this.selectCity}?%24top=50&%24format=JSON`
@@ -235,6 +242,9 @@ export default {
           }
         })
           .then(res => {
+            setTimeout(() => {
+              emitter.emit('stop-loading')
+            }, 1500)
             if (category === 'ScenicSpot') {
               this.specificCity.ScenicSpotData = res.data
               const data = this.specificCity.ScenicSpotData
