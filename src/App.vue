@@ -5,8 +5,6 @@
 <script>
 import getTdxAuthorize from '@/libs/TDXauthorize'
 // import TdxAuthorize from '@/libs/authorize'
-// import { Tooltip } from 'bootstrap/dist/js/bootstrap.esm.min.js'
-import { Tooltip } from 'bootstrap'
 
 export default {
   provide () {
@@ -31,8 +29,6 @@ export default {
   mounted () {
     // TdxAuthorize()
     getTdxAuthorize()
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    Array.from(tooltipTriggerList).map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
   }
 }
 </script>
