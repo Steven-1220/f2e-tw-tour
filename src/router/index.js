@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
@@ -21,6 +20,11 @@ const routes = [
     path: '/map',
     name: 'map',
     component: () => import('../views/MapView.vue')
+  },
+  {
+    // 404
+    path: '/:pathMatch(.*)*',
+    component: () => import('../views/PageError.vue')
   }
 ]
 
