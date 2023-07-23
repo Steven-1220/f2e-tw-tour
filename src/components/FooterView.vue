@@ -119,8 +119,8 @@ export default {
 .go-top-area {
   position: fixed;
   z-index: 15;
-  right: 55px;
-  bottom: 240px;
+  right: 12px;
+  bottom: 25px;
 }
 
 .go-top {
@@ -130,5 +130,12 @@ export default {
   border-radius: 50px;
   padding: 8px;
   cursor: pointer;
+}
+
+@media (min-width: 576px ) {
+  .go-top-area {
+  right: 55px;
+  bottom: 240px;
+  }
 }
 </style>
