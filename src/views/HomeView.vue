@@ -213,18 +213,6 @@ export default {
           }
         })
       }
-      // if (keyWord[0].titleName === this.search) {
-      //   this.$router.push({
-      //     name: 'detail',
-      //     query: {
-      //       id: keyWord[0].id,
-      //       city: keyWord[0].engName,
-      //       category: keyWord[0].category
-      //     }
-      //   })
-      // } else if (keyWord.length === 0) {
-      //   return null
-      // }
     },
     transformAllCategoryData () {
       const newAry = []

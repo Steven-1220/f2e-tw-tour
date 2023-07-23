@@ -29,15 +29,26 @@
               <option :value="item.englishName">{{ item.traditionalName }}</option>
             </template>
           </select>
-          <router-link :to="{
+          <!-- <router-link :to="{
             path:'/tourlist',
             query: {
                 city: this.$route.query.city,
                 category: this.$route.query.category
               }
-          }" class="btn rounded-circle bg-white">
+          }" class="btn rounded-circle bg-white"
+          data-bs-placement="top" title="回到旅遊清單頁面" data-bs-toggle="tooltip"
+          ref="showTip"
+          >
             <img src="../assets/images/list.svg" alt="回到旅遊清單頁面">
-          </router-link>
+          </router-link> -->
+          <button class="btn rounded-circle bg-white"
+          data-bs-placement="top" title="回到旅遊清單頁面" data-bs-trigger="manual"
+          data-bs-custom-class="custom-tooltip"
+          ref="showTip"
+          @click="goBackTourList" @mouseenter="showToolTip" @mouseleave="closeToolTip"
+          >
+            <img src="../assets/images/list.svg" alt="回到旅遊清單頁面">
+          </button>
         </div>
       </div>
     </div>
@@ -52,6 +63,7 @@ import GoHomeCircle from '@/components/GoHomeCircle.vue'
 import FixPinButton from '@/components/FixPinButton.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import emitter from '@/libs/emitter'
+import { Tooltip } from 'bootstrap'
 
 let osmMap = {}
 export default {
@@ -196,7 +208,8 @@ export default {
         HotelData: [],
         ActivityData: []
       },
-      token: JSON.parse(localStorage.getItem('TdxToken')) || []
+      token: JSON.parse(localStorage.getItem('TdxToken')) || [],
+      toolTipModal: ''
     }
   },
   methods: {
@@ -221,7 +234,6 @@ export default {
         }
       })
         .then(res => {
-          // this.mapData = res.data
           this.mapCardData = res.data
           const data = res.data
           this.determineMarkerCategory(data)
@@ -393,6 +405,22 @@ export default {
       } else if (this.selectCategory === 'all') {
         this.getCityAllCategories()
       }
+    },
+    goBackTourList () {
+      this.closeToolTip()
+      this.$router.push({
+        name: '旅遊清單頁面',
+        query: {
+          city: this.$route.query.city,
+          category: this.$route.query.category
+        }
+      })
+    },
+    showToolTip () {
+      this.toolTipModal.show()
+    },
+    closeToolTip () {
+      this.toolTipModal.hide()
     }
   },
   mounted () {
@@ -401,6 +429,7 @@ export default {
     this.selectCity = city
     this.selectCategory = category
     this.getCustomTourismInfo()
+    this.toolTipModal = new Tooltip(this.$refs.showTip)
   }
 }
 </script>
@@ -439,5 +468,10 @@ body {
 
 .select-map-category {
   max-width: 140px;
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bs-secondary);
+  --bs-tooltip-color: var(--bs-dark);
 }
 </style>

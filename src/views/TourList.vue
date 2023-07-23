@@ -34,10 +34,15 @@
             </button>
           </div>
           <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white"
-            data-bs-toggle="tooltip" data-bs-placement="right" title="查看地圖"
-            @click="lookMap">
+            data-bs-trigger="manual" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="查看地圖" ref="showTip"
+            @click="lookMap" @mouseenter="showToolTips" @mouseleave="closeToolTips">
             <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
           </button>
+          <!-- <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white" data-bs-toggle="tooltip"
+            data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="查看地圖" ref="showTip"
+            @click="lookMap">
+            <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
+          </button> -->
         </div>
       </div>
     </header>
@@ -60,6 +65,7 @@ import FixPinButton from '@/components/FixPinButton.vue'
 import GoHomeCircle from '@/components/GoHomeCircle.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import emitter from '@/libs/emitter'
+import { Tooltip } from 'bootstrap'
 
 export default {
   components: {
@@ -185,7 +191,8 @@ export default {
         }
       ],
       token: JSON.parse(localStorage.getItem('TdxToken')) || [],
-      pin: JSON.parse(localStorage.getItem('pin-items')) || []
+      pin: JSON.parse(localStorage.getItem('pin-items')) || [],
+      toolTipModal: ''
     }
   },
   methods: {
@@ -237,6 +244,7 @@ export default {
       this.$refs.pinItemsModalRef.openModal()
     },
     lookMap () {
+      this.closeToolTips()
       this.$router.push({
         name: 'map',
         query: {
@@ -244,6 +252,14 @@ export default {
           category: this.selectCategory
         }
       })
+    },
+    showToolTips () {
+      this.toolTipModal.show()
+      console.log('show')
+    },
+    closeToolTips () {
+      this.toolTipModal.hide()
+      console.log('hide')
     }
   },
   watch: {
@@ -269,6 +285,7 @@ export default {
     emitter.on('delete-pin-items', (pin) => {
       this.pin = pin
     })
+    this.toolTipModal = new Tooltip(this.$refs.showTip)
   }
 }
 
@@ -305,5 +322,10 @@ export default {
 
 .map-btn {
   width: 50px;
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bs-secondary);
+  --bs-tooltip-color: var(--bs-dark);
 }
 </style>
