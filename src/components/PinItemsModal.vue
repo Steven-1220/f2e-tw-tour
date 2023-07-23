@@ -104,7 +104,7 @@
             </table>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" v-if="pin.length !== 0">
           <button type="button" class="btn btn-danger" @click="deleteAllPinItems">全部取消</button>
         </div>
       </div>
@@ -273,10 +273,22 @@ export default {
       emitter.emit('delete-pin-items', this.pin)
     },
     deleteAllPinItems () {
-      if (this.pin.length === 0) return
-      this.pin.splice(0, this.pin.length)
-      this.transformPinItems()
-      emitter.emit('delete-pin-items', this.pin)
+      this.$swal.fire({
+        icon: 'warning',
+        title: '請確定是否要刪除全部釘選項目',
+        showCancelButton: true,
+        confirmButtonColor: '#FDB44B',
+        cancelButtonColor: '#EB5757',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+      })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.pin.splice(0, this.pin.length)
+            this.transformPinItems()
+            emitter.emit('delete-pin-items', this.pin)
+          }
+        })
     },
     openModal () {
       this.pinModal.show()

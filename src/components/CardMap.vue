@@ -285,6 +285,14 @@ export default {
   watch: {
     cardData () {
       this.mapFilterData = this.cardData
+      if (this.mapFilterData.length === 0) {
+        this.$swal.fire({
+          icon: 'info',
+          title: '不好意思',
+          text: '目前沒有相關資訊',
+          confirmButtonColor: '#FDB44B'
+        })
+      }
       console.log('watch', this.mapFilterData)
     }
   },
