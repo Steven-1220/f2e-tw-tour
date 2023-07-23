@@ -188,6 +188,13 @@ export default {
           const id = item.Picture.PictureUrl1.match(pattern)[1]
           item.Picture.PictureUrl1 = `${url}${id}`
         }
+        if (item.Picture.PictureUrl1.startsWith('https://2022.art-taipei') || item.Picture.PictureUrl1.startsWith('https://mw/cufiles')) {
+          item.Picture.PictureUrl1 = this.undefinedCard
+        } else if (item.Picture.PictureUrl1.startsWith('https://www.facebook') || item.Picture.PictureUrl1.startsWith('https://www.taiwantourbus')) {
+          item.Picture.PictureUrl1 = this.undefinedCard
+        } else if (item.Picture.PictureUrl1.startsWith('https://www.eastcoast-nsa')) {
+          item.Picture.PictureUrl1 = this.undefinedCard
+        }
         return item
       })
       this.filterData = filterApiData
@@ -198,6 +205,15 @@ export default {
     }
   },
   methods: {
+    // processCardImgError (imgUrl) {
+    //   if (imgUrl.startsWith('https://2022.art-taipei.com')) {
+    //     imgUrl = this.undefinedCard
+    //   } else if (imgUrl.startsWith('https://mw/cufiles/images/%E7%')) {
+    //     imgUrl = this.undefinedCard
+    //   } else if (imgUrl.startsWith('https://www.facebook.com')) {
+    //     imgUrl = this.undefinedCard
+    //   }
+    // },
     processPageData (currentPage = 1) {
       const dataPerPage = 10
       this.pageInfo.totalPages = Math.ceil(this.filterData.length / dataPerPage)
