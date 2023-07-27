@@ -4,7 +4,6 @@
 
 <script>
 import getTdxAuthorize from '@/libs/TDXauthorize'
-// import TdxAuthorize from '@/libs/authorize'
 
 export default {
   provide () {
@@ -27,7 +26,6 @@ export default {
     }
   },
   mounted () {
-    // TdxAuthorize()
     getTdxAuthorize()
   }
 }
