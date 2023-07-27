@@ -248,6 +248,9 @@ export default {
   },
   mounted () {
     this.getCategoryInfo()
+    emitter.on('get-pin-items', (pin) => {
+      this.pin = pin
+    })
   }
 }
 </script>
