@@ -45,7 +45,8 @@
         </div>
       </div>
     </header>
-    <div class="main mt-9 mb-10">
+
+    <div class="main mt-9 mb-10" v-if="showPage">
       <div class="container position-relative">
         <div class="tourism-pin-area bg-white border d-flex justify-content-center align-items-center">
           <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(this.$route.query.id, this.$route.query.category)">
@@ -228,6 +229,24 @@
       <CardNearby :near-by-card="nearByInfos" @emit-nearby-info="enterTourismDetail"></CardNearby>
     </div>
 
+    <div class="main mt-9 mb-10" v-if="!showPage">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 text-center">
+            <h1 class="display-1 text-danger">
+              <i class="bi bi-exclamation-triangle"></i> 404
+            </h1>
+            <p class="display-3">此頁面找不到資料</p>
+          </div>
+          <div class="col-12">
+            <div class="d-flex justify-content-center">
+              <RouterLink to="/" class="btn btn-primary">回首頁</RouterLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <FooterView></FooterView>
 </template>
 
@@ -270,7 +289,9 @@ export default {
       transitionName: 'slide-left-in',
       token: JSON.parse(localStorage.getItem('TdxToken')) || [],
       pin: JSON.parse(localStorage.getItem('pin-items')) || [],
-      defaultImg: 'this.src="' + require('@/assets/images/banner-city.jpg') + '"'
+      defaultImg: 'this.src="' + require('@/assets/images/banner-city.jpg') + '"',
+      UrlCategory: ['ScenicSpot', 'Restaurant', 'Hotel', 'Activity'],
+      showPage: true
     }
   },
   methods: {
@@ -304,6 +325,7 @@ export default {
     getTourismContent () {
       const { id, city, category } = this.$route.query
       console.log(id, city, category)
+      this.showPageContent(category)
       emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24filter=contains%28${category}ID%2C%27${id}%27%29&%24format=JSON`
       // const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/Hotel/Taichung?%24filter=contains%28HotelID%2C%27C4_315080000H_003044%27%29&%24format=JSON`
@@ -317,7 +339,7 @@ export default {
           this.pictureData = res.data[0].Picture
           this.currentTourismPosition = res.data[0].Position
           const arrPics = Object.values(this.pictureData)
-          console.log('arrPics', arrPics)
+          // console.log('arrPics', arrPics)
           this.bannerImages = arrPics.filter((item, index) => {
             return index % 2 === 0 ? item : null
           })
@@ -327,6 +349,7 @@ export default {
         })
         .catch(err => {
           console.log(err.response)
+          emitter.emit('stop-loading')
         })
     },
     // longitude 表示經度，latitude 表示緯度
@@ -342,7 +365,7 @@ export default {
           this.nearByInfos.ScenicSpot = res.data[0].ScenicSpots.ScenicSpotList
           this.nearByInfos.Restaurant = res.data[0].Restaurants.RestaurantList
           this.nearByInfos.Hotel = res.data[0].Hotels.HotelList
-          console.log(this.nearByInfos.ScenicSpot, this.nearByInfos.Restaurant, this.nearByInfos.Hotel)
+          // console.log(this.nearByInfos.ScenicSpot, this.nearByInfos.Restaurant, this.nearByInfos.Hotel)
         })
         .catch(err => {
           console.log(err)
@@ -398,6 +421,12 @@ export default {
       const pinItemIndex = this.pin.findIndex((item) => item.id === obj.id)
       pinItemIndex === -1 ? this.pin.push(obj) : this.pin.splice(pinItemIndex, 1)
       emitter.emit('get-pin-items', this.pin)
+    },
+    showPageContent (currentCategory) {
+      this.showPage = this.UrlCategory.some(category => {
+        return currentCategory === category
+      })
+      console.log('showPage', this.showPage)
     }
   },
   watch: {
@@ -417,16 +446,9 @@ export default {
         this.getTourismContent()
         this.getFilterInfo()
         this.reload()
-        // location.reload()
       },
       deep: true
     }
-    // pin: {
-    //   handler () {
-    //     localStorage.setItem('pin-items', JSON.stringify(this.pin))
-    //   },
-    //   deep: true
-    // }
   },
   mounted () {
     this.getTourismContent()
