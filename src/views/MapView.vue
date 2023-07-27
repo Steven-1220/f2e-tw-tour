@@ -227,7 +227,7 @@ export default {
     },
     getCustomTourismInfo () {
       emitter.emit('start-loading')
-      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=50&%24format=JSON`
+      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=300&%24format=JSON`
       this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
@@ -247,7 +247,7 @@ export default {
       emitter.emit('start-loading')
       const categories = ['ScenicSpot', 'Restaurant', 'Hotel', 'Activity']
       categories.forEach(category => {
-        const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${this.selectCity}?%24top=50&%24format=JSON`
+        const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${this.selectCity}?%24top=300&%24format=JSON`
         this.$http.get(url, {
           headers: {
             authorization: 'Bearer ' + this.token

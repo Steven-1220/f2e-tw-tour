@@ -38,11 +38,6 @@
             @click="lookMap" @mouseenter="showToolTips" @mouseleave="closeToolTips">
             <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
           </button>
-          <!-- <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white" data-bs-toggle="tooltip"
-            data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="查看地圖" ref="showTip"
-            @click="lookMap">
-            <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
-          </button> -->
         </div>
       </div>
     </header>
@@ -199,7 +194,7 @@ export default {
     getCustomTourismInfo () {
       if (this.selectCity === '' || this.selectCategory === '') return
       emitter.emit('start-loading')
-      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=50&%24format=JSON`
+      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${this.selectCategory}/${this.selectCity}?%24top=300&%24format=JSON`
       this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
@@ -226,7 +221,7 @@ export default {
       this.selectCity = city
       this.selectCategory = category
       emitter.emit('start-loading')
-      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24top=50&%24format=JSON`
+      const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24top=300&%24format=JSON`
       this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
