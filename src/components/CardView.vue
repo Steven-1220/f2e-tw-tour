@@ -215,7 +215,7 @@ export default {
     //   }
     // },
     processPageData (currentPage = 1) {
-      const dataPerPage = 10
+      const dataPerPage = 24
       this.pageInfo.totalPages = Math.ceil(this.filterData.length / dataPerPage)
 
       const minPerPageData = dataPerPage * currentPage - dataPerPage + 1
