@@ -12,7 +12,6 @@
       <div class="row justify-content-center align-items-center">
         <div class="col-2">
           <select class="form-select rounded-pill text-center shadow mb-0 me-3 fw-bold" v-model="selectCity" @change="selectMapCity">
-            <!-- <option value="all">全部</option> -->
             <template v-for="item in cities" :key="item.englishName">
               <option :value="item.englishName">{{ item.traditionalName }}</option>
             </template>
@@ -29,23 +28,11 @@
               <option :value="item.englishName">{{ item.traditionalName }}</option>
             </template>
           </select>
-          <!-- <router-link :to="{
-            path:'/tourlist',
-            query: {
-                city: this.$route.query.city,
-                category: this.$route.query.category
-              }
-          }" class="btn rounded-circle bg-white"
-          data-bs-placement="top" title="回到旅遊清單頁面" data-bs-toggle="tooltip"
-          ref="showTip"
-          >
-            <img src="../assets/images/list.svg" alt="回到旅遊清單頁面">
-          </router-link> -->
           <button class="btn rounded-circle bg-white"
-          data-bs-placement="top" title="回到旅遊清單頁面" data-bs-trigger="manual"
-          data-bs-custom-class="custom-tooltip"
-          ref="showTip"
-          @click="goBackTourList" @mouseenter="showToolTip" @mouseleave="closeToolTip"
+            data-bs-placement="top" title="回到旅遊清單頁面" data-bs-trigger="manual"
+            data-bs-custom-class="custom-tooltip"
+            ref="showTip"
+            @click="goBackTourList" @mouseenter="showToolTip" @mouseleave="closeToolTip"
           >
             <img src="../assets/images/list.svg" alt="回到旅遊清單頁面">
           </button>
@@ -215,7 +202,7 @@ export default {
   methods: {
     showMap () {
       osmMap = L.map('map', {
-      // 預設台北座標
+      // 預設台北為中心座標
         center: [25.03, 121.55],
         zoom: 10
       })
@@ -392,7 +379,6 @@ export default {
     },
     selectMapCategory () {
       this.deleteMarker()
-      console.log(this.selectCategory)
       if (this.selectCategory !== 'all') {
         this.$router.replace({
           name: 'map',

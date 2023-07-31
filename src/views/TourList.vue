@@ -250,11 +250,9 @@ export default {
     },
     showToolTips () {
       this.toolTipModal.show()
-      console.log('show')
     },
     closeToolTips () {
       this.toolTipModal.hide()
-      console.log('hide')
     }
   },
   watch: {

@@ -22,9 +22,7 @@ const getToken = function () {
   )
     .then((response) => response.json())
     .then((response) => {
-      // console.log(response)
       const token = response.access_token
-      // console.log(token)
       localStorage.setItem('TdxToken', JSON.stringify(token))
     })
     .catch((error) => console.log('error', error))

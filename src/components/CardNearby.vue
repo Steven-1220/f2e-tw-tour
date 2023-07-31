@@ -253,7 +253,6 @@ export default {
     nearByCard: {
       handler () {
         this.relatedNearbyInfos = this.nearByCard
-        console.log('relatedNearbyInfos', this.relatedNearbyInfos)
         this.$nextTick(() => {
           this.getNearByScenicSpotId('ScenicSpot')
           this.getNearByRestaurantId('Restaurant')

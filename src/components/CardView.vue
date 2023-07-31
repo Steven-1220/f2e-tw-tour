@@ -205,15 +205,6 @@ export default {
     }
   },
   methods: {
-    // processCardImgError (imgUrl) {
-    //   if (imgUrl.startsWith('https://2022.art-taipei.com')) {
-    //     imgUrl = this.undefinedCard
-    //   } else if (imgUrl.startsWith('https://mw/cufiles/images/%E7%')) {
-    //     imgUrl = this.undefinedCard
-    //   } else if (imgUrl.startsWith('https://www.facebook.com')) {
-    //     imgUrl = this.undefinedCard
-    //   }
-    // },
     processPageData (currentPage = 1) {
       const dataPerPage = 24
       this.pageInfo.totalPages = Math.ceil(this.filterData.length / dataPerPage)

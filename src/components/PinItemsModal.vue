@@ -255,7 +255,6 @@ export default {
       const englishCity = this.cities.find(city => {
         return city.traditionalName === chineseCity
       })
-      console.log(englishCity)
       this.$router.push({
         name: 'detail',
         query: {
@@ -316,9 +315,6 @@ export default {
         this.transformPinItems()
       })
     })
-    // this.$nextTick(() => {
-    //   this.transformPinItems()
-    // })
   }
 }
 </script>

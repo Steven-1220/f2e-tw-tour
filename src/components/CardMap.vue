@@ -293,12 +293,10 @@ export default {
           confirmButtonColor: '#FDB44B'
         })
       }
-      console.log('watch', this.mapFilterData)
     }
   },
   mounted () {
     this.filterData = this.cardData
-    console.log('mapFilterData', this.mapFilterData)
     emitter.on('get-pin-items', (pin) => {
       this.pin = pin
     })
@@ -318,10 +316,6 @@ export default {
   max-width: 100%;
   z-index: 10;
 }
-
-// .card-scroll-set {
-//   overflow-x: auto;
-// }
 
 .card-map-item {
   width: 200px;

@@ -53,7 +53,6 @@
 </template>
 
 <script>
-// import getTdxAuthorize from '@/libs/TDXauthorize'
 
 export default {
   data () {
@@ -197,7 +196,6 @@ export default {
       }
     },
     keyWordSearch () {
-      console.log('unifyStandardData', this.unifyStandardData)
       const keyWord = this.unifyStandardData.filter(item => {
         return item.titleName.includes(this.search)
       })
@@ -251,7 +249,6 @@ export default {
         })
       })
       this.unifyStandardData = newAry
-      console.log('unifyStandardData', this.unifyStandardData)
     },
     addEnglishName (newObj, categoryObj) {
       this.cities.forEach(city => {
@@ -280,7 +277,6 @@ export default {
           this.scenicSpotData = res.data
           const categoryData = this.scenicSpotData
           this.allData.push(categoryData)
-          // console.log('allData', 'ScenicSpot', this.allData)
         })
         .catch(err => {
           console.log(err.response)
@@ -297,7 +293,6 @@ export default {
           this.restaurantData = res.data
           const categoryData = this.restaurantData
           this.allData.push(categoryData)
-          // console.log('allData', 'Restaurant', this.allData)
         })
         .catch(err => {
           console.log(err.response)
@@ -314,7 +309,6 @@ export default {
           this.hotelData = res.data
           const categoryData = this.hotelData
           this.allData.push(categoryData)
-          // console.log('allData', 'Hotel', this.allData)
         })
         .catch(err => {
           console.log(err.response)
@@ -331,7 +325,6 @@ export default {
           this.activityData = res.data
           const categoryData = this.activityData
           this.allData.push(categoryData)
-          // console.log('allData', 'Activity', this.allData)
         })
         .catch(err => {
           console.log(err.response)

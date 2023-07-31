@@ -18,17 +18,6 @@
               </template>
             </div>
           </template>
-          <!-- <transition-group :name="transitionName">
-            <div class="carousel-img-item" v-for="(item, index) in bannerImages" :key="index + '123'" v-show="showBanner === index" >
-              <img :src="item" alt="旅遊相關圖片" class="carousel-img">
-            </div>
-          </transition-group>
-          <div class="carousel-btns d-flex justify-content-center align-items-end">
-            <button type="button" class="border-0 bg-transparent" v-for="(num, index) in bannerImages.length" :key="num +'123'" @click="showBannerImg(num - 1)">
-              <span v-if="showBanner === index"><i class="bi bi-circle-fill"></i></span>
-              <span v-else><i class="bi bi-circle"></i></span>
-            </button>
-          </div> -->
 
           <template  v-if="bannerImages.length === 0">
             <div class="carousel-img-item">
@@ -278,7 +267,6 @@ export default {
       randomOtherData: [],
       currentPageCategory: this.$route.query.category,
       currentPageCity: this.$route.query.city,
-      // currentPageId: this.$route.query.id,
       currentTourismPosition: {},
       nearByInfos: {
         ScenicSpot: [],
@@ -295,7 +283,6 @@ export default {
     }
   },
   methods: {
-    // https://tdx.transportdata.tw/api/basic/v2/Tourism/Restaurant/Taichung?%24format=JSON
     getFilterInfo () {
       const { id, city, category } = this.$route.query
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?&%24format=JSON`
@@ -324,11 +311,9 @@ export default {
     },
     getTourismContent () {
       const { id, city, category } = this.$route.query
-      console.log(id, city, category)
       this.showPageContent(category)
       emitter.emit('start-loading')
       const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/${category}/${city}?%24filter=contains%28${category}ID%2C%27${id}%27%29&%24format=JSON`
-      // const url = `https://tdx.transportdata.tw/api/basic/v2/Tourism/Hotel/Taichung?%24filter=contains%28HotelID%2C%27C4_315080000H_003044%27%29&%24format=JSON`
       this.$http.get(url, {
         headers: {
           authorization: 'Bearer ' + this.token
@@ -339,7 +324,6 @@ export default {
           this.pictureData = res.data[0].Picture
           this.currentTourismPosition = res.data[0].Position
           const arrPics = Object.values(this.pictureData)
-          // console.log('arrPics', arrPics)
           this.bannerImages = arrPics.filter((item, index) => {
             return index % 2 === 0 ? item : null
           })
@@ -361,35 +345,15 @@ export default {
         }
       })
         .then(res => {
-          console.log(res.data[0])
           this.nearByInfos.ScenicSpot = res.data[0].ScenicSpots.ScenicSpotList
           this.nearByInfos.Restaurant = res.data[0].Restaurants.RestaurantList
           this.nearByInfos.Hotel = res.data[0].Hotels.HotelList
-          // console.log(this.nearByInfos.ScenicSpot, this.nearByInfos.Restaurant, this.nearByInfos.Hotel)
         })
         .catch(err => {
           console.log(err)
         })
     },
     showBannerImg (index) {
-      // if (index < 0) {
-      //   this.transitionName = 'slide-left-in'
-      //   this.showBanner = this.bannerImages.length - 1
-      // } else if (index > this.bannerImages.length - 1) {
-      //   this.transitionName = 'slide-right-in'
-      //   this.showBanner = 0
-      // } else {
-      //   this.transitionName = this.showBanner < index ? 'slide-right-in' : 'slide-left-in'
-      //   this.showBanner = index
-      // }
-      // if (index > this.bannerImages.length - 1) {
-      //   this.transitionName = 'slide-right-in'
-      //   this.showBanner = 0
-      // } else {
-      //   this.transitionName = this.showBanner < index ? 'slide-right-in' : 'slide-left-in'
-      //   this.showBanner = index
-      // }
-      // this.transitionName = this.showBanner < index ? 'slide-right-in' : 'slide-right-in'
       this.showBanner = index
       clearInterval(timer)
       timer = setInterval(this.slideShow, 2500)
@@ -426,7 +390,6 @@ export default {
       this.showPage = this.UrlCategory.some(category => {
         return currentCategory === category
       })
-      console.log('showPage', this.showPage)
     }
   },
   watch: {
