@@ -17,7 +17,7 @@
           <p class="text-white mb-4">服務據點：台北市中山區明水路636號</p>
           <ul class="list-unstyled text-white mb-8 text-nowrap d-none d-sm-flex">
             <li>
-              |<a href="#" class="link-light text-decoration-none fw-bold mx-4">我的行程</a>
+              |<router-link to="/" class="link-light text-decoration-none fw-bold mx-4">我的行程</router-link>
             </li>
             <li>
               |<router-link to="/" class="link-light text-decoration-none fw-bold mx-4">找美食</router-link>
