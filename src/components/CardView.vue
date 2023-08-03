@@ -194,6 +194,8 @@ export default {
           item.Picture.PictureUrl1 = this.undefinedCard
         } else if (item.Picture.PictureUrl1.startsWith('https://www.eastcoast-nsa')) {
           item.Picture.PictureUrl1 = this.undefinedCard
+        } else if (item.Picture.PictureUrl1.startsWith('https://ppt.cc')) {
+          item.Picture.PictureUrl1 = this.undefinedCard
         }
         return item
       })
@@ -206,7 +208,7 @@ export default {
   },
   methods: {
     processPageData (currentPage = 1) {
-      const dataPerPage = 24
+      const dataPerPage = 48
       this.pageInfo.totalPages = Math.ceil(this.filterData.length / dataPerPage)
 
       const minPerPageData = dataPerPage * currentPage - dataPerPage + 1
@@ -255,8 +257,14 @@ export default {
 }
 
 .card-info {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   z-index: 1;
+}
+
+@media (min-width: 420px) {
+  .card-info {
+    aspect-ratio: 4 / 5;
+  }
 }
 
 .pin {
