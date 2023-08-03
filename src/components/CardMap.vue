@@ -29,9 +29,9 @@
         <swiper-slide v-for="item in mapFilterData" :key="item.ScenicSpotID">
           <div class="row flex-nowrap vw-100">
             <div class="col pb-2 card-map-center">
-              <div class="card card-info card-map-item position-relative border-0 h-100">
+              <div class="card card-map-info card-map-item position-relative border-0 h-100">
                 <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-list-page.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
-                <div class="card-body card-info text-white shadow-layer">
+                <div class="card-body card-map-info text-white shadow-layer">
                   <div class="pin bg-white">
                     <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ScenicSpotID, 'ScenicSpot')">
                       <span v-if="pin.find(pinItem => pinItem.id === item.ScenicSpotID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
@@ -89,9 +89,9 @@
         <swiper-slide v-for="item in mapFilterData" :key="item.RestaurantID">
           <div class="row flex-nowrap vw-100">
             <div class="col pb-2 card-map-center">
-              <div class="card card-info card-map-item position-relative border-0 h-100">
+              <div class="card card-map-info card-map-item position-relative border-0 h-100">
                 <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-list-page.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
-                <div class="card-body card-info text-white shadow-layer">
+                <div class="card-body card-map-info text-white shadow-layer">
                   <div class="pin bg-white">
                     <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.RestaurantID, 'Restaurant')">
                       <span v-if="pin.find(pinItem => pinItem.id === item.RestaurantID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
@@ -149,9 +149,9 @@
         <swiper-slide v-for="item in mapFilterData" :key="item.HotelID">
           <div class="row flex-nowrap vw-100">
             <div class="col pb-2 card-map-center">
-              <div class="card card-info card-map-item position-relative border-0 h-100">
+              <div class="card card-map-info card-map-item position-relative border-0 h-100">
                 <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-list-page.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
-                <div class="card-body card-info text-white shadow-layer">
+                <div class="card-body card-map-info text-white shadow-layer">
                   <div class="pin bg-white">
                     <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.HotelID, 'Hotel')">
                       <span v-if="pin.find(pinItem => pinItem.id === item.HotelID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
@@ -209,9 +209,9 @@
         <swiper-slide v-for="item in mapFilterData" :key="item.ActivityID">
           <div class="row flex-nowrap vw-100">
             <div class="col pb-2 card-map-center">
-              <div class="card card-info card-map-item position-relative border-0 h-100">
+              <div class="card card-map-info card-map-item position-relative border-0 h-100">
                 <img :src="item.Picture.PictureUrl1 || require('@/assets/images/card-list-page.jpg')" class="card-img" :alt="item.Picture?.PictureDescription1">
-                <div class="card-body card-info text-white shadow-layer">
+                <div class="card-body card-map-info text-white shadow-layer">
                   <div class="pin bg-white">
                     <a class="d-flex justify-content-center align-items-center h-100" @click="switchPinItem(item.ActivityID, 'Activity')">
                       <span v-if="pin.find(pinItem => pinItem.id === item.ActivityID)"><img src="../assets/images/pin-active.png" alt="已釘選"></span>
@@ -329,7 +329,7 @@ export default {
   object-fit: cover;
 }
 
-.card-info {
+.card-map-info {
   aspect-ratio: 4 / 5;
   z-index: 1;
 }
@@ -338,7 +338,7 @@ export default {
   .card-map-item {
     width: 70%;
   }
-  .card-info {
+  .card-map-info {
     aspect-ratio: 6/4;
   }
   .card-map-center {
