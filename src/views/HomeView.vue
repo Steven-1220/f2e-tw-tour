@@ -2,14 +2,14 @@
   <div class="home">
     <div class="position-relative">
       <img src="../assets/images/ellipse.svg" class="orange-circle" alt="首頁橘色圓">
-      <div class="container custom-select">
-        <div class="row vh-100 justify-content-center">
-          <div class="col-10 col-md-8">
+      <div class="container">
+        <div class="row justify-content-center custom-select">
+          <div class="col-10 col-md-8 position-relative">
             <img src="../assets/images/logo.svg"  class="lets-go" alt="let's go 文字圖片">
             <img src="../assets/images/rocket.png" class="rocket" alt="火箭">
             <img src="../assets/images/font-taiwan.svg" class="tw-logo" alt="台灣文字圖片">
           </div>
-          <div class="col-10 col-md-4 d-flex flex-column justify-content-center mt-auto mt-md-0 pb-8 pb-md-0">
+          <div class="col-10 col-md-4 d-flex flex-column justify-content-center mt-auto mt-md-0 pb-8 pb-md-0 position-relative">
               <h1 class="text-white text-center mb-6">訂製你的專屬旅程</h1>
               <select class="form-select rounded-pill text-center mb-4 py-2 fs-5" v-model="selectCity">
                 <option value="">選擇地點</option>
@@ -391,6 +391,7 @@ export default {
 }
 
 .custom-select {
+  min-height: 100vh;
   position: relative;
   z-index: 5;
 }
@@ -406,7 +407,7 @@ export default {
   width:60vw;
   position: absolute;
   display: block;
-  top: 24%;
+  top: 52%;
   left: 30%;
   &::after {
     position: absolute;
@@ -423,7 +424,7 @@ export default {
   width: 45vw;
   height: 20vw;
   position: absolute;
-  top: 42%;
+  top: 143%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -435,6 +436,8 @@ export default {
   }
   .rocket {
     width: 40vw;
+    left: 20%;
+    top: 35%;
   }
   .tw-logo {
     width: 28vw;
