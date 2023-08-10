@@ -4,7 +4,7 @@
         <div class="row h-100">
           <div class="col d-flex justify-content-center align-items-center">
             <GoHomeCircle></GoHomeCircle>
-            <div class="main-title d-flex justify-content-center align-items-center mt-8 mt-md-0">
+            <div class="main-title d-flex justify-content-center align-items-center mt-20 mt-md-0">
               <h1 class="display-2 fw-bold text-white d-flex align-items-center">{{ selectCityChinese.slice(0,1) }}
                 <span class="h3 px-6">{{selectCity}}</span>{{ selectCityChinese.slice(1,2) }}
               </h1>
