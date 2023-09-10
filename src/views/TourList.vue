@@ -15,15 +15,15 @@
       </div>
 
       <div class="container select">
-        <div class="row">
-          <div class="col d-flex justify-content-center align-items-center">
-            <select class="form-select rounded-pill text-center select-location shadow mb-0 me-3" v-model="selectCity">
+        <div class="row position-relative">
+          <div class="col d-flex justify-content-center align-items-center position-relative">
+            <select class="form-select rounded-pill text-center select-location shadow mb-0 me-2 pe-4" v-model="selectCity">
               <option value="">選擇地點</option>
               <template v-for="item in cities" :key="item.englishName">
                 <option :value="item.englishName">{{ item.traditionalName }}</option>
               </template>
             </select>
-            <select class="form-select rounded-pill text-center select-category shadow mb-0 me-3" v-model="selectCategory">
+            <select class="form-select rounded-pill text-center select-category shadow mb-0 me-2 pe-4" v-model="selectCategory">
               <option value="">類別</option>
               <template v-for="item in categories" :key="item.englishName">
                 <option :value="item.englishName">{{ item.traditionalName }}</option>
@@ -33,11 +33,13 @@
               <img src="../assets/images/search.svg" alt="搜尋按鈕">
             </button>
           </div>
-          <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white"
-            data-bs-trigger="manual" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="查看地圖" ref="showTip"
-            @click="lookMap" @mouseenter="showToolTips" @mouseleave="closeToolTips">
-            <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
-          </button>
+          <div class="d-flex justify-content-end map-btn-area position-absolute">
+            <button class="btn rounded-pill  map-btn d-inline-block shadow bg-white"
+              data-bs-trigger="manual" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="查看地圖" ref="showTip"
+              @click="lookMap" @mouseenter="showToolTips" @mouseleave="closeToolTips">
+              <img src="../assets/images/map.svg" class="img-fluid" alt="地圖按鈕">
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -307,10 +309,21 @@ export default {
 
 .select-location,.select-category {
   max-width: 140px;
+  z-index: 10;
 }
 
 .search-btn {
   max-width: 70px;
+}
+
+.map-btn-area {
+  top: 45px;
+}
+
+@media (min-width: 576px) {
+  .map-btn-area {
+    top: 0;
+  }
 }
 
 .map-btn {

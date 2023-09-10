@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5">
+  <div class="mb-5 mt-3">
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
       <!-- 景點卡片 -->
       <template v-if="isScenicSpot">
@@ -265,6 +265,14 @@ export default {
   .card-info {
     aspect-ratio: 4 / 5;
   }
+}
+
+.card-title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // 行數
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 .pin {
